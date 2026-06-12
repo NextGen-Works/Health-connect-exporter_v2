@@ -1,5 +1,9 @@
 # Health Connect Exporter v2
 
+<img width="450" height="893" alt="brave_sLV4F57xMa" src="https://github.com/user-attachments/assets/8d3ab7d3-c3e9-45d5-bfb5-ee0557b6c395" />
+
+
+
 A production-grade, local-first Android backup utility designed as a robust replace-in-place client for [hcgateway](https://github.com/your-org/hcgateway) self-hosted endpoints.
 
 ## Features
