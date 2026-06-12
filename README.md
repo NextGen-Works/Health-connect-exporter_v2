@@ -1,6 +1,6 @@
 # Health Connect Exporter v2
 
-<img width="450" height="893" alt="brave_sLV4F57xMa" src="https://github.com/user-attachments/assets/8d3ab7d3-c3e9-45d5-bfb5-ee0557b6c395" />
+
 
 
 
@@ -145,4 +145,4 @@ Tests verify:
 
 ## License
 
-MIT License. See [LICENSE](LICENSE) for details.
+Apache License 2.0. See [[LICENSE](LICENSE](http://www.apache.org/licenses/LICENSE-2.0)) for details.
