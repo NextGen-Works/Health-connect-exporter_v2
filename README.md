@@ -143,6 +143,9 @@ Tests verify:
 | Preferences | DataStore |
 | Testing | JUnit 4 + MockK + Coroutines Test |
 
+<img width="450" height="893" alt="brave_sLV4F57xMa" src="https://github.com/user-attachments/assets/657c704a-69ef-4288-82af-05d724eb4bb4" />
+
+
 ## License
 
 Apache License 2.0. See [[LICENSE](LICENSE](http://www.apache.org/licenses/LICENSE-2.0)) for details.
