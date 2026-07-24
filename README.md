@@ -1,151 +1,222 @@
-# Health Connect Exporter v2
+<div align="center">
+  <img src="https://img.shields.io/badge/Flutter-3.44+-02569B?style=for-the-badge&logo=flutter&logoColor=white" alt="Flutter">
+  <img src="https://img.shields.io/badge/Dart-3.12+-0175C2?style=for-the-badge&logo=dart&logoColor=white" alt="Dart">
+  <img src="https://img.shields.io/badge/minSdk-26-6DB33F?style=for-the-badge&logo=android&logoColor=white" alt="minSdk 26">
+  <img src="https://img.shields.io/badge/License-GPLv3-blue?style=for-the-badge" alt="License">
+  <br>
+  <img src="https://img.shields.io/badge/Health_Connect-✓-00C853?style=flat-square" alt="Health Connect">
+  <img src="https://img.shields.io/badge/Foreground_Service-✓-00C853?style=flat-square" alt="Foreground Service">
+  <img src="https://img.shields.io/badge/No_Firebase_Required-✓-00C853?style=flat-square" alt="No Firebase">
+</div>
 
+<br>
 
+<p align="center">
+  <h1 align="center">HCGateway <em>(Flutter)</em></h1>
+  <p align="center">
+    A universal REST API bridge for Android Health Connect — built with Flutter.
+    <br />
+    Read 30+ health data types from Health Connect and sync them to your own backend.
+    <br />
+    <a href="https://github.com/ShuchirJ/HCGateway"><strong>Original Project »</strong></a>
+  </p>
+</p>
 
+<br>
 
+---
 
-A production-grade, local-first Android backup utility designed as a robust replace-in-place client for [hcgateway](https://github.com/your-org/hcgateway) self-hosted endpoints.
+## ✨ Features
 
-## Features
+<table>
+  <tr>
+    <td width="50%">
+      <h3>📊 Health Connect Integration</h3>
+      <ul>
+        <li>Reads <strong>30+ health data types</strong> from Android Health Connect</li>
+        <li>Steps, heart rate, sleep, blood pressure, glucose, weight, and more</li>
+        <li>Two-way sync capable (device ⟷ server)</li>
+      </ul>
+    </td>
+    <td width="50%">
+      <h3>🔄 REST API Bridge</h3>
+      <ul>
+        <li>Configurable API base URL</li>
+        <li>Auto-login & token refresh</li>
+        <li>Full 30-day or incremental sync modes</li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%">
+      <h3>⚙️ Background Sync</h3>
+      <ul>
+        <li>Foreground service with persistent notification</li>
+        <li>Configurable sync interval (default: every 2 hours)</li>
+        <li>Custom date range selection for manual sync</li>
+      </ul>
+    </td>
+    <td width="50%">
+      <h3>🔒 Privacy-First</h3>
+      <ul>
+        <li><strong>No Firebase required</strong> — no external dependencies</li>
+        <li>No analytics, no crash reporting</li>
+        <li>Your data, your server</li>
+      </ul>
+    </td>
+  </tr>
+</table>
 
-- **Local-first architecture** — Data is persisted to SQLite before any network transmission, ensuring nothing is lost in dead zones
-- **Idempotent sync** — Deterministic deduplication keys (`[type]_[healthConnectId]_[timestamp]`) guarantee single-delivery
-- **Delta sync engine** — Cursor watermarks only advance on server acknowledgement, with configurable rolling lookback
-- **Automatic retry** — Exponential backoff on network failures with status reversion for failed batches
-- **Manual repair sync** — Re-sync arbitrary lookback windows (1–30 days) from the Diagnostics screen
-- **8 health data types** — Steps, Heart Rate, Sleep, Distance, Active Calories, Weight, Blood Pressure, Workouts
-- **Material 3 UI** — Onboarding, Dashboard, Settings, and Diagnostics screens with dark theme
+---
 
-## Architecture
-
-```
-ui/            Compose screens + ViewModels (business logic decoupled)
-domain/core/   Sealed Result<T>, AppException tree, Logger
-healthconnect/ Health Connect client wrapper with permission handling
-storage/       Room entities, DAOs, database (destructive migration)
-network/       Retrofit API interface, DTOs, partial acknowledgement models
-sync/          WorkManager CoroutineWorker with exponential retry
-di/            Hilt dependency injection module
-```
-
-## Database Schema
-
-| Entity | Purpose |
-|--------|---------|
-| `RawHealthRecord` | Archives exact Health Connect payload to prevent model skew |
-| `NormalizedHealthRecord` | Outbound records with dedup key and status tracking (`PENDING` / `IN_FLIGHT` / `ACKNOWLEDGED` / `FAILED`) |
-| `SyncCursor` | High-watermark per record type with customizable `rollingLookbackMs` (default 24h) |
-| `AppEventLog` | Offline audit trail for troubleshooting connectivity failures |
-| `PermissionState` | Tracks granted Health Connect permissions |
-
-## Getting Started
+## 🚀 Quick Start
 
 ### Prerequisites
+- Android device running **Android 8.0 (API 26) or newer**
+- [Health Connect](https://play.google.com/store/apps/details?id=com.google.android.apps.healthdata) app installed from Play Store
+- A running HCGateway server (or use the hosted instance at `https://api.hcgateway.shuchir.dev`)
 
-- Android Studio Hedgehog (2023.1.1) or later
-- Android SDK 35
-- A running [hcgateway](https://github.com/your-org/hcgateway) instance
-- Health Connect app installed on device
+### Installation
+1. Download the latest APK from the [Releases](../../releases) page
+2. Install on your device (you may need to enable "Install from unknown sources")
+3. Open the app, enter a **username** and **password**
+4. Grant **all Health Connect permissions** when prompted
+5. Tap **Sync Now**
 
-### Build
+> New to HCGateway? An account will be created automatically on first login.
+
+---
+
+## 📱 Supported Health Data Types
+
+<details>
+<summary><b>Click to expand full list (30+ types)</b></summary>
+<br>
+
+| Category | Types |
+|---|---|
+| **Activity** | Active Calories Burned, Steps, Floors Climbed, Distance, Elevation Gained, Power, Speed, Wheelchair Pushes |
+| **Body Metrics** | Weight, Height, Body Fat, Body Temperature, Basal Body Temperature, Bone Mass, Lean Body Mass, BMI |
+| **Cardiovascular** | Heart Rate, Resting Heart Rate, Blood Pressure (systolic/diastolic), VO2 Max, Oxygen Saturation |
+| **Glucose** | Blood Glucose |
+| **Metabolic** | Basal Metabolic Rate, Total Calories Burned |
+| **Hydration & Nutrition** | Hydration (Water), Nutrition |
+| **Sleep** | Sleep Session (all stages: deep, light, REM, awake) |
+| **Respiratory** | Respiratory Rate |
+| **Reproductive** | Menstruation Flow, Menstruation Period, Ovulation Test, Cervical Mucus |
+| **Exercise** | Exercise Session (Workout) |
+
+</details>
+
+---
+
+## 🏗️ Architecture
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                   HCGateway Flutter App                      │
+│                                                             │
+│  ┌─────────────┐  ┌──────────────┐  ┌───────────────────┐  │
+│  │ Login Screen │  │  Home Screen │  │ Background Service│  │
+│  │  (auth)      │  │  (settings)  │  │  (foreground sync)│  │
+│  └──────┬───────┘  └──────┬───────┘  └─────────┬─────────┘  │
+│         │                 │                    │            │
+│         ▼                 ▼                    ▼            │
+│  ┌─────────────────────────────────────────────────────┐   │
+│  │                   Sync Service                       │   │
+│  │  Reads Health Connect → Formats → POSTs to API      │   │
+│  └────────────────────────┬────────────────────────────┘   │
+│                          │                                 │
+└──────────────────────────┼─────────────────────────────────┘
+                           │
+          ┌────────────────▼────────────────┐
+          │          HCGateway API           │
+          │     (Python / Flask / MongoDB)   │
+          │  https://api.hcgateway.shuchir.dev│
+          └─────────────────────────────────┘
+```
+
+---
+
+## ⚙️ Configuration
+
+All settings are configurable directly from the app:
+
+| Setting | Description | Default |
+|---|---|---|
+| **API Base URL** | Your HCGateway server address | `https://api.hcgateway.shuchir.dev` |
+| **Sync Interval** | How often to auto-sync (hours) | `2` |
+| **Full Sync** | Sync all 30 days vs incremental | `true` |
+| **Auto Sync** | Enable background periodic sync | `false` |
+| **Custom Range** | Sync a specific date range | — |
+
+---
+
+## 🛠️ Building from Source
 
 ```bash
-./gradlew assembleDebug
+# Clone
+git clone https://github.com/yourusername/hcgateway-flutter.git
+cd hcgateway-flutter
+
+# Get dependencies
+flutter pub get
+
+# Analyze (should be clean)
+flutter analyze
+
+# Build APK (universal)
+flutter build apk --release
+
+# Build split APKs (smaller per-device)
+flutter build apk --release --split-per-abi
 ```
 
-### Setup
+Outputs in `build/app/outputs/flutter-apk/`
 
-1. Install and open the app
-2. Grant Health Connect permissions during onboarding
-3. Navigate to **Settings** and configure:
-   - **Base URL** — Your hcgateway endpoint (e.g., `https://health.example.com`)
-   - **Authorization Token** — Bearer token for authentication
-   - **Device ID** — Unique identifier for this device
-4. Select which health data types to export
-5. Return to **Dashboard** and tap **Trigger Sync**
+---
 
-## Sync Engine
+## 🧩 Tech Stack
 
-### Delta Sync Rules
+| Component | Technology |
+|---|---|
+| **Framework** | Flutter 3.44+ / Dart 3.12+ |
+| **Health API** | [`health`](https://pub.dev/packages/health) v13 (Health Connect) |
+| **HTTP Client** | [`dio`](https://pub.dev/packages/dio) v5 |
+| **Local Storage** | [`shared_preferences`](https://pub.dev/packages/shared_preferences) |
+| **Background Service** | [`flutter_background_service`](https://pub.dev/packages/flutter_background_service) v5 + [`flutter_local_notifications`](https://pub.dev/packages/flutter_local_notifications) |
+| **State Management** | StatefulWidget + ChangeNotifier pattern |
+| **Minimum API** | Android 8.0 (API 26) |
+| **Target API** | Android 14+ (API 34+) |
 
-1. Cursor watermarks **never** advance before receiving an affirmative HTTP response
-2. Failed batches revert all records to `PENDING` and trigger exponential backoff
-3. Partial acknowledgements update individual record statuses correctly
-4. Duplicate uploads are blocked via deterministic deduplication keys
+---
 
-### Repair Sync
+## 🤝 Contributing
 
-The Diagnostics screen provides a **Repair Sync** dialog that allows:
+Contributions are welcome! Feel free to open issues or submit PRs.
 
-- Selecting a lookback range (1, 3, 7, 14, or 30 days)
-- Filtering by specific record type or all types
-- Re-submitting previously failed records to the gateway
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-## API Contract
+---
 
-### `POST /v1/ingest/batch`
+## 📄 License
 
-```json
-{
-  "records": [
-    {
-      "id": "hc-uuid",
-      "type": "StepsRecord",
-      "payload": { "count": 500 },
-      "capturedAt": 1700000000000,
-      "deduplicationKey": "StepsRecord_hc-uuid_1700000000000"
-    }
-  ],
-  "deviceId": "my-phone",
-  "batchId": "uuid-v4"
-}
-```
+Distributed under the **GPL-3.0 License**. See [`LICENSE`](LICENSE) for more information.
 
-### Response (partial acknowledgement support)
+---
 
-```json
-{
-  "success": true,
-  "batchId": "uuid-v4",
-  "acknowledged": [
-    { "deduplicationKey": "StepsRecord_hc-uuid_1700000000000", "serverRecordId": "srv-1" }
-  ],
-  "rejected": [
-    { "deduplicationKey": "StepsRecord_hc-uuid2_1700000001000", "reason": "Duplicate", "errorCode": "DUPLICATE" }
-  ],
-  "serverTimestamp": 1700000060000
-}
-```
+## 🙏 Acknowledgments
 
-## Testing
+- [ShuchirJ](https://github.com/ShuchirJ) — Original HCGateway project & API
+- [health](https://pub.dev/packages/health) Flutter package — Health Connect integration
+- All contributors to the HCGateway ecosystem
 
-```bash
-./gradlew testDebugUnitTest
-```
+---
 
-Tests verify:
-- Revoked permissions abort execution without breaking database state
-- Cursors are preserved on server errors and advance only on full acknowledgments
-- Duplicate uploads are blocked using deterministic keys
-- Failed batches correctly revert status for retry
-
-## Tech Stack
-
-| Component | Library |
-|-----------|---------|
-| UI | Jetpack Compose + Material 3 |
-| DI | Hilt |
-| Database | Room (SQLite) |
-| Network | Retrofit + OkHttp + Gson |
-| Background | WorkManager |
-| Health Data | Health Connect SDK |
-| Async | Kotlin Coroutines + Flow |
-| Preferences | DataStore |
-| Testing | JUnit 4 + MockK + Coroutines Test |
-
-<img width="450" height="893" alt="brave_sLV4F57xMa" src="https://github.com/user-attachments/assets/657c704a-69ef-4288-82af-05d724eb4bb4" />
-
-
-## License
-
-Apache License 2.0. See [[LICENSE](LICENSE](http://www.apache.org/licenses/LICENSE-2.0)) for details.
+<div align="center">
+  <sub>Built with ❤️ for the health data community</sub>
+</div>
