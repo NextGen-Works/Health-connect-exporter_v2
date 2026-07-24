@@ -1,0 +1,28 @@
+name: hcgateway
+description: "HCGateway - Health Connect REST API Bridge"
+publish_to: 'none'
+
+version: 2.2.1+1
+
+environment:
+  sdk: ^3.12.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  health: ^13.3.1
+  dio: ^5.4.0
+  shared_preferences: ^2.2.0
+  flutter_background_service: ^5.0.0
+  flutter_local_notifications: ^18.0.0
+  intl: ^0.20.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
